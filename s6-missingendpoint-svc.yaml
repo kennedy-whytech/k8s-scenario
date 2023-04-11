@@ -1,0 +1,12 @@
+# nginx-service-missing-endpoints.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: s6-missingendpoint-svc
+spec:
+  selector:
+    app: nginx123
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: s9-catresolv-svc
+spec:
+  selector:
+    app: s9-catresolv
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

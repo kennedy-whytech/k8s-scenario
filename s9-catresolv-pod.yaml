@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: s9-catresolv-pod
+  labels:
+    app: s9-catresolv
+spec:
+  containers:
+  - name: s9-catresolv-container
+    image: nginx
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      echo "Contents of /etc/resolv.conf:"
+      cat /etc/resolv.conf
+      sleep 3600
+  restartPolicy: Never

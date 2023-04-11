@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: s8-pingexistingsvc-svc
+spec:
+  selector:
+    app: s8-pingexistingsvc
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s8-pingexistingsvc-deploy
+spec:
+  selector:
+    matchLabels:
+      app: s8-pingexistingsvc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: s8-pingexistingsvc
+    spec:
+      containers:
+      - name: s8-pingexistingsvc-container
+        image: nginx
+        ports:
+        - containerPort: 9376
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: s8-pingexistingsvc-request
+spec:
+  containers:
+  - name: alpine
+    image: alpine
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      echo "Starting nslookup of ClusterIP service..."
+      apk add --no-cache bind-tools
+      nslookup s8-pingexistingsvc-svc
+  restartPolicy: Never

@@ -1,0 +1,29 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: s10-healthcronjob
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: busybox
+            image: busybox
+            command: ["/bin/sh" , "-c"]
+            args:
+            - |
+              if kubectl get pods s1-pending-pod | grep "Pending"; then
+                echo "Pod is stuck in Pending state" 
+              else
+                echo "Pod is not stuck in Pending state" 
+              fi
+            volumeMounts:
+              - name: hostpath
+                mountPath: /hostpath
+          restartPolicy: Never
+          volumes:
+          - name: hostpath
+            hostPath:
+              path: /mnt/data
